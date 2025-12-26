@@ -10,18 +10,21 @@ const fileContentCache = {};
 
 function loadFile(fileName) {
   if (!fileContentCache[fileName]) {
+    // 修改这里，从本地 dict-data 目录读取数据
     fileContentCache[fileName] = fs
-      .readFileSync(`node_modules/opencc-data/data/${fileName}.txt`, {
+      .readFileSync(`./dict-data/${fileName}.txt`, {
         encoding: 'utf-8'
       })
       .trimEnd()
       .split('\n')
+      // 过滤掉注释行
+      .filter(line => line.trim() !== '' && !line.trim().startsWith('//'))
       .map((line) => {
         const [k, vs] = line.split('\t');
         const v = vs.split(' ')[0]; // only select the first candidate, the subsequent candidates are ignored
         return [k, v];
       })
-      .filter(([k, v]) => k !== v || k.length > 1) // remove “char => the same char” convertions to reduce file size
+      .filter(([k, v]) => k !== v || k.length > 1) // remove "char => the same char" convertions to reduce file size
       .map(([k, v]) => k + ' ' + v)
       .join('|');
     const outputFile = getAbsPath(`./dist/esm-lib/dict/${fileName}.js`);
@@ -76,13 +79,16 @@ export {fromDicts as from, toDicts as to};`;
 });
 
 // update from/index.js to/index.js
-['from', 'to'].forEach(type => {
+// 只处理存在的类型（from 或 to）
+Object.keys({from: variants2standard, to: standard2variants}).forEach(type => {
   const localeCollection = type === 'from' ? variants2standard : standard2variants;
-  const locales = Object.keys(localeCollection);
-  const code = locales.map(loc => `import ${loc} from "./${loc}.js";`);
-  code.push('');
-  code.push(`export { ${locales.join(', ')} }`);
-  fs.writeFileSync(getAbsPath(`./dist/esm-lib/${type}/index.js`), code.join('\n'));
+  if (Object.keys(localeCollection).length > 0) {
+    const locales = Object.keys(localeCollection);
+    const code = locales.map(loc => `import ${loc} from "./${loc}.js";`);
+    code.push('');
+    code.push(`export { ${locales.join(', ')} }`);
+    fs.writeFileSync(getAbsPath(`./dist/esm-lib/${type}/index.js`), code.join('\n'));
+  }
 });
 
 // update presets

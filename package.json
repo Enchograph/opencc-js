@@ -2,16 +2,15 @@
   "name": "opencc-js",
   "version": "1.0.5",
   "description": "The JavaScript version of Open Chinese Convert (OpenCC)",
-  "main": "./dist/umd/full.js",
+  "main": "./dist/umd/cn2t.js",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/esm/full.js",
-      "require": "./dist/umd/full.js"
+      "import": "./dist/esm/cn2t.js",
+      "require": "./dist/umd/cn2t.js"
     },
     "./cn2t": "./dist/esm/cn2t.js",
-    "./t2cn": "./dist/esm/t2cn.js",
-    "./preset": "./dist/esm-lib/preset/full.js",
+    "./preset": "./dist/esm-lib/preset/cn2t.js",
     "./*": "./dist/esm-lib/*.js"
   },
   "scripts": {
@@ -42,7 +41,6 @@
   "homepage": "https://github.com/nk2028/opencc-js#readme",
   "devDependencies": {
     "chai": "~4.3.4",
-    "opencc-data": "~1.0.7",
     "rollup-plugin-generate-package-json": "^3.2.0"
   }
 }

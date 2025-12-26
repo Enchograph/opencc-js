@@ -1,33 +1,15 @@
 export const variants2standard = {
-  cn: ['STCharacters', 'STPhrases'],
-  hk: ['HKVariantsRev', 'HKVariantsRevPhrases'],
-  tw: ['TWVariantsRev', 'TWVariantsRevPhrases'],
-  twp: ['TWVariantsRev', 'TWVariantsRevPhrases', 'TWPhrasesRev'],
-  jp: ['JPVariantsRev', 'JPShinjitaiCharacters', 'JPShinjitaiPhrases'],
+  cn: ['STCharacters', 'STPhrases'], // 简体到繁体的转换规则
 };
 
 export const standard2variants = {
-  cn: ['TSCharacters', 'TSPhrases'],
-  hk: ['HKVariants'],
-  tw: ['TWVariants'],
-  twp: ['TWVariants', 'TWPhrasesIT', 'TWPhrasesName', 'TWPhrasesOther'],
-  jp: ['JPVariants'],
+  // 为空，因为我们只做简体到繁体转换
 };
 
 export const presets = [
   {
-    filename: 'full',
-    from: Object.keys(variants2standard),
-    to: Object.keys(standard2variants)
-  },
-  {
-    filename: 'cn2t',
+    filename: 'cn2t', // 只保留简体到繁体的预设
     from: ['cn'],
-    to: ['hk', 'tw', 'twp', 'jp']
-  },
-  {
-    filename: 't2cn',
-    from: ['hk', 'tw', 'twp', 'jp'],
-    to: ['cn']
+    to: [] // 不需要 to，因为我们只做简体到繁体的转换
   }
 ];
